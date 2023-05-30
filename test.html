@@ -87,7 +87,7 @@
           $('#imagePreview').show();
 
           // Load the model and classify the image
-          const model = await $.index.ui.loadModel();
+          const model = await loadModel();
           const predictions = await classifyImage(model, imageElement);
 
           // Display the classification result
