@@ -6,9 +6,7 @@ block content
     h2 Your Agricultural Pest and Disease Specialist
     div#dropArea.drop-area
       p
-        | Drag and drop an image here
-        br
-        | or click to select an image
+        | loading...
     form#uploadForm(enctype="multipart/form-data")
       input#image(type="file", name="image", style="display: none;")
     
@@ -16,5 +14,6 @@ block content
       h3 Classification Result: 
       p#classification 
     div#imagePreview.mt-4(style="display:none;")
-      h3 Uplaoded Image: 
-      img#previewImg(src="", alt="Uploaded Image" style="max-width:100%;")
+      h3 Uplaoded Image:
+      canvas#canvas(width="320", height="320")
+      //img#previewImg(src="", alt="Uploaded Image" style="max-width:100%;")
