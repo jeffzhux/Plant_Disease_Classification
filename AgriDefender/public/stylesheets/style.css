@@ -1,0 +1,37 @@
+body {
+  background-color: #f8f9fa;
+  padding-top: 40px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.drop-area:hover {
+  background-color: #f8f9fa;
+}
+
+#result {
+  margin-top: 30px;
+}

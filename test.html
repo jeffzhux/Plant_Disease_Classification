@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Classification</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding-top: 40px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .drop-area {
+      border: 2px dashed #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .drop-area:hover {
+      background-color: #f8f9fa;
+    }
+
+    #result {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AgriDefender</h1>
+    <h2>Your Agricultural Pest and Disease Specialist</h2>
+    <div id="dropArea" class="drop-area">
+      <p>Drag and drop an image here<br>or click to select an image</p>
+    </div>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" id="image" name="image" style="display: none;">
+    </form>
+    <div id="result" class="mt-4" style="display: none;">
+      <h3>Classification Result:</h3>
+      <p id="classification"></p>
+    </div>
+    <div id="imagePreview" class="mt-4" style="display: none;">
+      <h3>Uploaded Image:</h3>
+      <img id="previewImg" src="" alt="Uploaded Image" style="max-width: 100%;">
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.9.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.0.4"></script>
+  <script>
+    $(document).ready(function() {
+      // Function to handle file selection
+      function handleFile(file) {
+        // Display a loading message while classification is in progress
+        $('#result').hide();
+        $('#classification').text('Classifying image...');
+        $('#result').show();
+
+        // Read the image file as a data URL
+        const reader = new FileReader();
+        reader.onloadend = async function() {
+          // Create an image element and load the data URL
+          const imageElement = document.createElement('img');
+          imageElement.src = reader.result;
+
+          // Display the uploaded image
+          $('#previewImg').attr('src', reader.result);
+          $('#imagePreview').show();
+
+          // Load the model and classify the image
+          const model = await $.index.ui.loadModel();
+          const predictions = await classifyImage(model, imageElement);
+
+          // Display the classification result
+          const resultText = predictions.map(p => `${p.className}: ${p.probability.toFixed(4)}`).join('<br>');
+          $('#classification').html(resultText);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // Load the MobileNet model from TensorFlow.js
+      async function loadModel() {
+        try {
+          const model = await mobilenet.load();
+          return model;
+        } catch (error) {
+          console.error('Failed to load model:', error);
+        }
+      }
+
+      // Perform image classification on the provided image
+      async function classifyImage(model, imageElement) {
+        try {
+          const predictions = await model.classify(imageElement);
+          return predictions;
+        } catch (error) {
+          console.error('Failed to classify image:', error);
+        }
+      }
+
+      // Handle file drop
+      function handleDrop(event) {
+        event.preventDefault();
+        console.log(event.dataTransfer);
+        const file = event.dataTransfer.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      }
+
+      // Handle file selection via file input
+      $('#image').change(function() {
+        const file = this.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      });
+
+      // Set up drag and drop listeners
+      const dropArea = document.getElementById('dropArea');
+      dropArea.addEventListener('dragover', function(event) {
+        event.preventDefault();
+      });
+      dropArea.addEventListener('drop', handleDrop);
+      dropArea.addEventListener('click', function() {
+        $('#image').click();
+      });
+    });
+  </script>
+</body>
+</html>
