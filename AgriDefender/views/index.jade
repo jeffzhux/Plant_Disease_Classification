@@ -4,14 +4,20 @@ block content
   div.container
     h1 AgriDefender
     h2 Your Agricultural Pest and Disease Specialist
-    div#dropArea.drop-area
-      canvas#canvas(width="320", height="320")
-    form#uploadForm(enctype="multipart/form-data")
-      input#image(type="file", name="image", style="display: none;")
+    div.layout
+      div
+        div#dropArea.drop-area
+          canvas#canvas(width="320", height="320")
+        form#uploadForm(enctype="multipart/form-data")
+          input#image(type="file", name="image", style="display: none;")
     
-    div#result.mt-4(style="display:none;")
-      h3 Classification Result: 
-      p#classification 
-    div#imagePreview.mt-4(style="display:none;")
-      h3 Uplaoded Image:
-      //canvas#canvas(width="320", height="320")
+      div#result.output-container
+        h3 Classification Result: 
+        p#classification
+        each num in Array.from(Array(5).keys())
+          div(class=(num === 0 ? 'output-class predicted':'output-class'))
+            div.output-label
+              | -
+            div.output-bar(style="width: 0px; background: rgba(42, 106, 150, 0); transition: null 0s ease 0s;")
+            div.output-value
+              | 0%

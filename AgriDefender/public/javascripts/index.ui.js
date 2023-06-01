@@ -83,7 +83,20 @@
 
         topk = imagenetClassesTopK(outputTensor)
         const resultText = topk.map(p => `${p.name}: ${p.probability.toFixed(4)}`).join('<br>');
-          $('#classification').html(resultText);
+        // show result
+        $('#result').hide();
+        $('#classification').text('');
+        $('#result').show();
+        $('#result .output-class').each(function(key, value){
+            $(this).find('.output-label').text(topk[key].name)
+            if(key === 0){
+                $(this).find('.output-bar').css({"width":topk[key].probability + "px","background":"rgba(42, 106, 150, 0.55)","transition":"width 0.2s ease-in-out 0.2s"})
+            }
+            else{
+                $(this).find('.output-bar').css({"width":topk[key].probability + "px","background":"rgba(42, 106, 150, 0.2)","transition":"width 0.2s ease-in-out 0.2s"})
+            }
+            $(this).find('.output-value').text(topk[key].probability.toFixed(0)+'%')
+        })
     }
     $(window).ready(function(){
         $.index.var.sess = new onnx.InferenceSession(),
