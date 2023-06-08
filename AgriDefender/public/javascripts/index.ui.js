@@ -3,6 +3,7 @@
     $.extend($.index, { var: {}, ui: {} });
     $.extend($.index.var, {
         classindex:['K0', 'Mg0', 'OT01', 'gDE03', 'gDP04', 'gDP06', 'tDA12', 'tDC01', 'tDC08', 'tDE03', 'tDP06', 'tDS07', 'tID03', 'tIH04', 'tIH05', 'tIL11', 'tIL13'],
+        nameindex:['鉀缺乏', '鎂缺乏', '日燒', '白粉病', '銹病', '露菌病', '藻類', '赤葉枯病','藻斑病','茶餅病','輪班病','煤煙病','潛葉蠅','茶角盲椿象','小桔蚜','茶細蛾','茶姬捲葉蛾'],
         sess : null,
         loadingModelPromise : null
     });
@@ -57,6 +58,8 @@
                     ctx.clearRect(0, 0, maxWidth, maxHeight);
                     var x = (canvas.width - width) / 2;
                     var y = (canvas.height - height) / 2;
+                    ctx.fillStyle ='#717171';
+                    ctx.fillRect(0,0,maxWidth,maxHeight);
                     ctx.drawImage(img, x, y, width, height);
                     $("#dropArea").html(canvas);
                     $('#imagePreview').show();
@@ -100,7 +103,7 @@
     }
     $(window).ready(function(){
         $.index.var.sess = new onnx.InferenceSession(),
-        $.index.var.sess.loadModel("../weights/sl.onnx").then(() =>{
+        $.index.var.sess.loadModel("../weights/two_expert.onnx").then(() =>{
             $.index.ui._init();
             //$('#dropArea').html("<p>Drag and drop an image here<br/>or click to select an image</p>");
         })

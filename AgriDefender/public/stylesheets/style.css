@@ -70,7 +70,7 @@ h2 {
 
 .output-label{
   text-align: right;
-  width: 100px;
+  width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
