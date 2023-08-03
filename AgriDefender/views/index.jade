@@ -2,17 +2,25 @@ extends layout
 
 block content
   div.container
-    h1 AgriDefender
+    h1 國科會, 智慧永續新農業研究發展中心
     h2 Your Agricultural Pest and Disease Specialist
     div.layout
       div
+        select#plant_image(class="form-select")
+          option(value="") 選擇影像 
+          each file in files
+            option(value=file.link) #{file.name}
         div#dropArea.drop-area
+          h3 Upload file
           canvas#canvas(width="320", height="320")
         form#uploadForm(enctype="multipart/form-data")
           input#image(type="file", name="image", style="display: none;")
     
       div#result.output-container
-        h3 Classification Result: 
+        h3
+          //- | Inference Time: 
+          | Classification 
+          span#inference_time(style="display:none")
         p#classification
         each num in Array.from(Array(5).keys())
           div(class=(num === 0 ? 'output-class predicted':'output-class'))

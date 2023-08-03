@@ -23,8 +23,23 @@
             $("#dropArea").on('dragover', function(event){
                 event.preventDefault();
             });
+            $("#plant_image").on('change', function(event){
+                const url = $(this).find(":selected").val();
+                if(url != ""){
+                    fetch(url).then(response => response.blob())
+                    .then(file => {
+                        $.index.ui.handleFile(file);
+                    })
+                }
+                else{
+                    // 清空canvas
+                    location.reload();
+                }
+
+            });
             $("#image").on('change', function(){
                 const file = this.files[0];
+                console.log(file);
                 if (file) {
                     $.index.ui.handleFile(file);
                     
@@ -36,7 +51,7 @@
             $('#result').hide();
             $('#classification').text('Classifying image...');
             $('#result').show();
-
+            
             const reader = new FileReader();
             reader.onloadend = async function(event) {
                 var img = new Image();
@@ -75,7 +90,7 @@
     async function recongnize(){
         var canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-
+        const start = Date.now()
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         preprocessData = preprocess(imgData.data, canvas.width, canvas.height)
 
@@ -86,10 +101,13 @@
 
         topk = imagenetClassesTopK(outputTensor)
         const resultText = topk.map(p => `${p.name}: ${p.probability.toFixed(4)}`).join('<br>');
+        
         // show result
         $('#result').hide();
         $('#classification').text('');
+        $('#inference_time').text((Date.now()-start)/1000 + 's')
         $('#result').show();
+
         $('#result .output-class').each(function(key, value){
             $(this).find('.output-label').text(topk[key].name)
             if(key === 0){
